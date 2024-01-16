@@ -1,4 +1,4 @@
-app = "app-c2ee"
+app = "lexi-trac"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = [ ]
