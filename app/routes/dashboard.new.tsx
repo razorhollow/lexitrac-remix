@@ -1,33 +1,33 @@
 import { json, redirect, type ActionFunctionArgs } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 
-import { createNote } from "~/models/note.server";
+import { createJob } from "~/models/job.server";
 import { requireUserId } from "~/session.server";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
     const userId = await requireUserId(request);
   
     const formData = await request.formData();
-    const title = formData.get("title");
-    const body = formData.get("body");
+    const caseName = formData.get("caseName");
+    const jobDate = formData.get("jobDate");
   
-    if (typeof title !== "string" || title.length === 0) {
+    if (typeof caseName !== "string" || caseName.length === 0) {
       return json(
-        { errors: { body: null, title: "Title is required" } },
+        { errors: { body: null, caseName: "Case Name is required" } },
         { status: 400 },
       );
     }
   
-    if (typeof body !== "string" || body.length === 0) {
+    if (typeof jobDate !== "string" || jobDate.length === 0) {
       return json(
-        { errors: { body: "Body is required", title: null } },
+        { errors: { jobDate: "Job Date is required", title: null } },
         { status: 400 },
       );
     }
   
-    const note = await createNote({ body, title, userId });
+    const job = await createJob({ jobDate, caseName, userId });
   
-    return redirect(`/notes/${note.id}`);
+    return redirect('/dashboard');
   };
 
 export default function CreateJob() {
@@ -45,7 +45,7 @@ export default function CreateJob() {
     >
       <div>
         <label className="flex w-full flex-col gap-1">
-          <span>Case Name: </span>f
+          <span>Case Name: </span>
           <input
             name="caseName"
             className="flex-1 rounded-md border-2 border-blue-500 px-3 text-lg leading-loose"
@@ -55,7 +55,7 @@ export default function CreateJob() {
             }
           />
         </label>
-        {actionData?.errors?.title ? (
+        {actionData?.errors?.caseName ? (
           <div className="pt-1 text-red-700" id="title-error">
             {actionData.errors.caseName}
           </div>
@@ -64,20 +64,21 @@ export default function CreateJob() {
 
       <div>
         <label className="flex w-full flex-col gap-1">
-          <span>Body: </span>
-          <textarea
-            name="body"
-            rows={8}
+          <span>Job Date: </span>
+          <input
+            name="jobDate"
             className="w-full flex-1 rounded-md border-2 border-blue-500 px-3 py-2 text-lg leading-6"
-            aria-invalid={actionData?.errors?.body ? true : undefined}
+            type="datetime-local"
+            aria-label="date and time"
+            aria-invalid={actionData?.errors?.jobDate? true : undefined}
             aria-errormessage={
-              actionData?.errors?.body ? "body-error" : undefined
+              actionData?.errors?.jobDate? "jobDate-error" : undefined
             }
           />
         </label>
-        {actionData?.errors?.body ? (
+        {actionData?.errors?.jobDate ? (
           <div className="pt-1 text-red-700" id="body-error">
-            {actionData.errors.body}
+            {actionData.errors.jobDate}
           </div>
         ) : null}
       </div>

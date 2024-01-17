@@ -1,4 +1,4 @@
-import type { User } from "@prisma/client";
+import type { Job } from "@prisma/client";
 
 import { prisma } from "~/db.server";
 
@@ -15,4 +15,8 @@ export function getJob(jobNumber: number) {
     select: { jobNumber: true, caseName: true, jobDate: true, dueDate: true, client: true, reporter: true } ,
     where: { jobNumber }
     })
+}
+
+export async function createJob({ caseName, jobDate, dueDate, client, reporterId}: Pick<Job, "caseName" | "jobDate" | "dueDate" | "client" | "reporterId">) {
+  const jobIndex = await prisma.jobIndex.findFirst()
 }
