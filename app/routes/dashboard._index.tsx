@@ -7,6 +7,7 @@ import { getJobListItems } from "~/models/job.server";
 
 interface JobItem {
   id: string;
+  jobNumber: number;
   caseName: string;
   dueDate: Date;
   client: string;
@@ -28,7 +29,7 @@ export default function DashboardIndex() {
       ) : (
         <div className="w-full h-full">
           {data.jobListItems.map((job) => (
-            <Link key={job.id} to={job.id}>
+            <Link key={job.jobNumber} to={job.jobNumber.toString()}>
               <div  className="max-w-sm rounded overflow-hidden shadow-lg p-4 m-4">
                 <div className="font-bold text-xl mb-2">
                   {job.caseName}
