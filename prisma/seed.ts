@@ -55,7 +55,7 @@ async function seed() {
       jobDate: new Date('2024-01-10T00:00:00.000Z'),
       dueDate: new Date('2024-01-25T00:00:00.000Z'),
       client: "Ziff",
-      userId: user.id
+      reporter: user.id
     }
   })
   await prisma.job.create({
