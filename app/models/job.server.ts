@@ -5,7 +5,7 @@ import { prisma } from "~/db.server";
 export function getJobListItems() {
     return prisma.job.findMany({
       where: {},
-      select: { jobNumber: true, caseName: true, dueDate: true, client: true },
+      select: { jobNumber: true, caseName: true, dueDate: true, reporter: true },
       orderBy: { dueDate: "desc" },
     });
   }

@@ -23,11 +23,11 @@ export const loader = async () => {
 export default function DashboardIndex() {
   const data = useLoaderData<{ jobListItems: JobItem[] }>()
   return (
-    <main className="flex h-full bg-gray-800">
+    <main className="flex align-middle justify-center h-full">
       {data.jobListItems.length === 0 ? (
         <p>No Open Jobs</p>
       ) : (
-        <div className="w-full h-full">
+        <div className="flex justify-between flex-wrap bg-gray-100 p-4 rounded-xl">
           {data.jobListItems.map((job) => (
             <Link key={job.jobNumber} to={job.jobNumber.toString()}>
               <div  className="max-w-sm rounded overflow-hidden shadow-lg p-4 m-4">
@@ -38,7 +38,7 @@ export default function DashboardIndex() {
                   Due Date: {moment(job.dueDate).format('MM/DD/YYYY')}
                 </p>
                 <p className="text-gray-700 text-base">
-                  Reporter: {job.reporter || 'unassigned'}
+                  Reporter: {job.reporter.firstName || 'unassigned'}
                 </p>
               </div>
             </Link>
