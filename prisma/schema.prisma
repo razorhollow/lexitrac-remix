@@ -42,6 +42,7 @@ model Note {
 
 model Job {
   id       String   @id @default(uuid())
+  jobNumber Int @default(0) 
   caseName String
   jobDate  DateTime
   dueDate  DateTime

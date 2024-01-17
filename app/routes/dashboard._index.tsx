@@ -28,17 +28,19 @@ export default function DashboardIndex() {
       ) : (
         <div className="w-full h-full">
           {data.jobListItems.map((job) => (
-            <div key={job.id} className="max-w-sm rounded overflow-hidden shadow-lg p-4 m-4">
-              <div className="font-bold text-xl mb-2">
-                {job.caseName}
+            <Link key={job.id} to={job.id}>
+              <div  className="max-w-sm rounded overflow-hidden shadow-lg p-4 m-4">
+                <div className="font-bold text-xl mb-2">
+                  {job.caseName}
+                </div>
+                <p className="text-gray-700 text-base">
+                  Due Date: {moment(job.dueDate).format('MM/DD/YYYY')}
+                </p>
+                <p className="text-gray-700 text-base">
+                  Reporter: {job.reporter || 'unassigned'}
+                </p>
               </div>
-              <p className="text-gray-700 text-base">
-                Due Date: {moment(job.dueDate).format('MM/DD/YYYY')}
-              </p>
-              <p className="text-gray-700 text-base">
-                Reporter: {job.reporter || 'unassigned'}
-              </p>
-            </div>
+            </Link>
           ))}
         </div>
       )}

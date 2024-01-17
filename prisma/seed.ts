@@ -43,28 +43,43 @@ async function seed() {
   await prisma.job.create({
     data: {
       caseName: "Smith v. Jones",
+      jobNumber: 1001,
       jobDate: new Date('2024-01-01T00:00:00.000Z'),
       dueDate: new Date('2024-01-15T00:00:00.000Z'),
       client: "Barclay Damon",
-      userId: user.id
+      reporter: {
+        connect: {
+          id: user.id
+        }
+      }
     }
   })
   await prisma.job.create({
     data: {
       caseName: "Porchek v. Wales",
+      jobNumber: 1002,
       jobDate: new Date('2024-01-10T00:00:00.000Z'),
       dueDate: new Date('2024-01-25T00:00:00.000Z'),
       client: "Ziff",
-      reporter: user.id
+      reporter: {
+        connect: {
+          id: user.id
+        }
+      }
     }
   })
   await prisma.job.create({
     data: {
       caseName: "Roe v. Wade",
+      jobNumber: 1003,
       jobDate: new Date('1971-12-13T00:00:00.000Z'),
       dueDate: new Date('1973-01-21T00:00:00.000Z'),
       client: "Dallas County",
-      userId: user.id
+      reporter: {
+        connect: {
+          id: user.id
+        }
+      }
     }
   })
 
