@@ -1,14 +1,18 @@
 import { json, redirect, type ActionFunctionArgs } from "@remix-run/node";
-import { Form, useActionData, useLoaderData } from "@remix-run/react";
+import { Form, useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
 
+import { prisma } from "~/db.server";
 import { createJob } from "~/models/job.server";
-import { User, getUserList } from "~/models/user.server";
+import { getUserList } from "~/models/user.server";
+import { advanceIndex } from "~/utils";
 
 export async function loader() {
   const reporterList = await getUserList()
   invariant(reporterList, "No reporters found")
-  return json({ reporterList})
+  const jobNumber = await prisma.jobIndex.findFirst()
+  invariant(jobNumber, "No job number found")
+  return json({ reporterList, jobNumber })
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -20,51 +24,34 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const client = formData.get("client")
     const reporterId = formData.get("reporterId")
   
-    if (typeof caseName !== "string" || caseName.length === 0) {
-      return json(
-        { errors: { body: null, caseName: "Case Name is required" } },
-        { status: 400 },
-      );
-    }
+    invariant(caseName, "Case Name is Required" )
+    invariant(jobDate, "Job Date is Required")
   
-    if (typeof jobDate !== 'string' || jobDate === null) {
-      return json(
-        { errors: { jobDate: "Job Date is required", title: null } },
-        { status: 400 },
-      );
-    }
-  
-    const job = await createJob({ jobDate, caseName, dueDate, client, reporterId});
+    await prisma.job.create()
+    await advanceIndex()
   
     return redirect('/dashboard');
   };
 
 export default function CreateJob() {
     const loaderData = useLoaderData<typeof loader>()
-    const actionData = useActionData<typeof action>();
+    const oldJob = loaderData.jobNumber.index
+    const thisJob = oldJob + 1
   return (
     <div className="w-4/5 flex flex-col justify-center items-center">
       <Form
       method="post"
       className="flex flex-col w-100"
     >
+      <h2>Job Number {thisJob}</h2>
       <div>
         <label className="flex w-full flex-col gap-1">
           <span>Case Name: </span>
           <input
             name="caseName"
             className="flex-1 rounded-md border-2 border-blue-500 px-3 text-lg leading-loose"
-            aria-invalid={actionData?.errors?.caseName ? true : undefined}
-            aria-errormessage={
-              actionData?.errors?.caseName ? "caseName-error" : undefined
-            }
           />
         </label>
-        {actionData?.errors?.caseName ? (
-          <div className="pt-1 text-red-700" id="caseName-error">
-            {actionData.errors.caseName}
-          </div>
-        ) : null}
       </div>
 
       <div>
@@ -75,17 +62,8 @@ export default function CreateJob() {
             className="w-full flex-1 rounded-md border-2 border-blue-500 px-3 py-2 text-lg leading-6"
             type="datetime-local"
             aria-label="date and time"
-            aria-invalid={actionData?.errors?.jobDate? true : undefined}
-            aria-errormessage={
-              actionData?.errors?.jobDate? "jobDate-error" : undefined
-            }
           />
         </label>
-        {actionData?.errors?.jobDate ? (
-          <div className="pt-1 text-red-700" id="body-error">
-            {actionData.errors.jobDate}
-          </div>
-        ) : null}
       </div>
 
       <div>
@@ -99,7 +77,7 @@ export default function CreateJob() {
             <option>Unassigned</option>
             {loaderData.reporterList.map((reporter) => (
               <option key={reporter.id} value={reporter.id} className="w-full flex-1 rounded-md border-2 border-blue-500 px-3 py-2 text-lg leading-6">
-                {reporter.firstName} {reporter.lastName[0].toUpperCase()}.
+                {reporter.firstName} {reporter.lastName?.[0]?.toUpperCase() ?? ""}.
               </option>
             ))}
           </select>

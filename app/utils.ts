@@ -3,6 +3,8 @@ import { useMemo } from "react";
 
 import type { User } from "~/models/user.server";
 
+import { prisma } from "./db.server";
+
 const DEFAULT_REDIRECT = "/";
 
 /**
@@ -74,3 +76,23 @@ export function useUser(): User {
 export function validateEmail(email: unknown): email is string {
   return typeof email === "string" && email.length > 3 && email.includes("@");
 }
+
+export async function advanceIndex() {
+  const oldIndex = await prisma.jobIndex.findFirst()
+
+  if (!oldIndex || oldIndex.id === null) {
+    throw new Error('No jobIndex record found!')
+  }
+
+  const newIndex = oldIndex.index + 1
+
+  await prisma.jobIndex.update({
+    where: {
+      id: oldIndex.id
+    },
+    data: {
+      index: newIndex,
+    }
+  })
+}
+
