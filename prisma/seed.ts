@@ -30,7 +30,7 @@ async function getIndex() {
     console.error("An error occurred:", error)
     return null
   }
-  return index
+  return JSON.stringify(index)
 }
 
 async function seed() {
@@ -146,3 +146,5 @@ seed()
   .finally(async () => {
     await prisma.$disconnect();
   });
+
+  export {getIndex, advanceIndex}

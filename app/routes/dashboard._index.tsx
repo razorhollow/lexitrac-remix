@@ -38,7 +38,7 @@ export default function DashboardIndex() {
                   Due Date: {moment(job.dueDate).format('MM/DD/YYYY')}
                 </p>
                 <p className="text-gray-700 text-base">
-                  Reporter: {job.reporter.firstName || 'unassigned'}
+                  Reporter: {job.reporter?.firstName || 'unassigned'}
                 </p>
               </div>
             </Link>

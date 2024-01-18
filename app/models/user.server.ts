@@ -61,3 +61,10 @@ export async function verifyLogin(
 
   return userWithoutPassword;
 }
+
+export async function getUserList() {
+  return prisma.user.findMany({
+    select: { id: true, firstName: true, lastName: true },
+    orderBy: { createdAt: "desc" },
+  });
+}
