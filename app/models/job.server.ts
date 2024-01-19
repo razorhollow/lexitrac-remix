@@ -50,3 +50,9 @@ export async function createJob({
     }
   })
 }
+
+export function deleteJob({jobNumber}: Pick<Job, "jobNumber">) {
+  return prisma.job.delete({
+    where: { jobNumber },
+  });
+}

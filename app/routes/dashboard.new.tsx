@@ -27,6 +27,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     invariant(caseName, "Case Name is Required" )
     invariant(jobDate, "Job Date is Required")
 
+
     await createJob({ caseName, jobDate, dueDate, client, reporter })
     await advanceIndex()
   

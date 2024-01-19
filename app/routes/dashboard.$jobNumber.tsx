@@ -1,10 +1,10 @@
-import type { LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
+import { useLoaderData, Form } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import moment from "moment";
 
-import { getJob } from "~/models/job.server";
+import { deleteJob, getJob } from "~/models/job.server";
 
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
@@ -22,6 +22,12 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     return json(job)
 }
 
+export async function action({ params }: ActionFunctionArgs) {
+  invariant(params.jobNumber, "Job Number not found")
+  await deleteJob({jobNumber: parseInt(params.jobNumber)})
+  return redirect('/dashboard')
+}
+
 export default function JobDetailsPage() {
     const job = useLoaderData<typeof loader>()
     return (
@@ -31,6 +37,11 @@ export default function JobDetailsPage() {
           <h3>{job.client}</h3>
           <p>Due: {moment(job.dueDate).format('MM/DD/YYYY')}</p>
           <p>{job.reporter?.firstName} {job.reporter?.lastName}</p>
+        <Form
+          method="POST"
+          >
+          <button type="submit">DELETE</button>
+        </Form>
         </main>
     )
 }
