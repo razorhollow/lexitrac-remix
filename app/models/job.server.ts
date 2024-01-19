@@ -39,12 +39,7 @@ export async function createJob({
       dueDate: new Date(dueDate),
       client,
       jobNumber: newJobIndex,
-      reporter: reporterId === "" ? null
-      :{
-        connect: {
-          id: reporterId 
-        }
-      } 
+      reporterId: reporterId && reporterId !== "" ? reporterId : null,
     }
   })
 }
