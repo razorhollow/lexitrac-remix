@@ -96,3 +96,14 @@ export async function advanceIndex() {
   })
 }
 
+export async function getIndex() {
+  let index
+  try {
+    index = await prisma.jobIndex.findFirst()
+  } catch (error) {
+    console.error("An error occurred:", error)
+    return null
+  }
+  return JSON.stringify(index?.index)
+}
+

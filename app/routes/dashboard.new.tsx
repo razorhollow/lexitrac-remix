@@ -18,16 +18,16 @@ export async function loader() {
 export const action = async ({ request }: ActionFunctionArgs) => {
   
     const formData = await request.formData();
-    const caseName = formData.get("caseName");
-    const jobDate = formData.get("jobDate");
-    const dueDate = formData.get("dueDate");
-    const client = formData.get("client")
-    const reporterId = formData.get("reporterId")
+    const caseName = formData.get("caseName") as string;
+    const jobDate = formData.get("jobDate") as string;
+    const dueDate = formData.get("dueDate") as string;
+    const client = formData.get("client") as string;
+    const reporter = formData.get("reporter") as string;
   
     invariant(caseName, "Case Name is Required" )
     invariant(jobDate, "Job Date is Required")
-  
-    await createJob({ caseName, jobDate, dueDate, client, reporterId})
+
+    await createJob({ caseName, jobDate, dueDate, client, reporter })
     await advanceIndex()
   
     return redirect('/dashboard');
@@ -48,6 +48,7 @@ export default function CreateJob() {
         <label className="flex w-full flex-col gap-1">
           <span>Case Name: </span>
           <input
+            required
             name="caseName"
             className="flex-1 rounded-md border-2 border-blue-500 px-3 text-lg leading-loose"
           />
@@ -58,6 +59,7 @@ export default function CreateJob() {
         <label className="flex w-full flex-col gap-1">
           <span>Job Date: </span>
           <input
+          required
             name="jobDate"
             className="w-full flex-1 rounded-md border-2 border-blue-500 px-3 py-2 text-lg leading-6"
             type="datetime-local"
@@ -70,6 +72,7 @@ export default function CreateJob() {
         <label className="flex w-full flex-col gap-1">
           <span>Due Date: </span>
           <input
+          required
             name="dueDate"
             className="w-full flex-1 rounded-md border-2 border-blue-500 px-3 py-2 text-lg leading-6"
             type="datetime-local"
@@ -86,7 +89,7 @@ export default function CreateJob() {
             id='reporter'
             className="w-full flex-1 rounded-md border-2 border-blue-500 px-3 py-2"
           >
-            <option>Unassigned</option>
+            <option value={undefined}>Unassigned</option>
             {loaderData.reporterList.map((reporter) => (
               <option key={reporter.id} value={reporter.id} className="w-full flex-1 rounded-md border-2 border-blue-500 px-3 py-2 text-lg leading-6">
                 {reporter.firstName} {reporter.lastName?.[0]?.toUpperCase() ?? ""}.

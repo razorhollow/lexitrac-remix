@@ -1,7 +1,7 @@
 import type { Job } from "@prisma/client";
 import invariant from "tiny-invariant";
 
-import { getIndex, advanceIndex } from "prisma/seed";
+import { getIndex } from "app/utils";
 import { prisma } from "~/db.server";
 import { JobFormInput } from "~/types";
 
@@ -25,21 +25,28 @@ export async function createJob({
   jobDate, 
   dueDate, 
   client,
-  reporterId
+  reporterId,
 }: Pick<Job, "caseName" | "jobDate" | "dueDate" | "client" | "reporterId"> 
- {
+){
   const jobIndex = await getIndex()
+  console.log('here is the job index received: ', jobIndex)
   invariant(jobIndex, "No Job Index Found")
   const newJobIndex = parseInt(jobIndex) + 1
+  console.log('the job index should be:', newJobIndex)
 
   return prisma.job.create({
     data: {
       caseName,
-      jobDate,
+      jobDate: new Date(jobDate),
       dueDate: new Date(dueDate),
       client,
-      reporterId,
-      jobNumber: newJobIndex
+      jobNumber: newJobIndex,
+      reporter: reporterId != null ? {
+        connect: {
+          id: reporterId
+        }
+      }
+      : undefined,
     }
   })
 }

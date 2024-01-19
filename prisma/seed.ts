@@ -1,37 +1,11 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
+import { advanceIndex, getIndex } from "~/utils";
+
 const prisma = new PrismaClient();
 
-async function advanceIndex() {
-  const oldIndex = await prisma.jobIndex.findFirst()
 
-  if (!oldIndex || oldIndex.id === null) {
-    throw new Error('No jobIndex record found!')
-  }
-
-  const newIndex = oldIndex.index + 1
-
-  await prisma.jobIndex.update({
-    where: {
-      id: oldIndex.id
-    },
-    data: {
-      index: newIndex,
-    }
-  })
-}
-
-async function getIndex() {
-  let index
-  try {
-    index = await prisma.jobIndex.findFirst()
-  } catch (error) {
-    console.error("An error occurred:", error)
-    return null
-  }
-  return JSON.stringify(index)
-}
 
 async function seed() {
   const email = "rachel@remix.run";
@@ -135,7 +109,7 @@ async function seed() {
 
   console.log(`Database has been seeded. 🌱`);
   const endIndex = await getIndex()
-  console.log(`The Job Index is now ${endIndex?.index}`)
+  console.log(`The Job Index is now ${endIndex}`)
 }
 
 seed()
