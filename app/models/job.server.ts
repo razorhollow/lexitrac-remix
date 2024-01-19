@@ -20,7 +20,14 @@ export function getJob(jobNumber: number) {
     })
 }
 
-export async function createJob({ caseName, jobDate, dueDate, client, reporterId}: JobFormInput) {
+export async function createJob({ 
+  caseName, 
+  jobDate, 
+  dueDate, 
+  client,
+  reporterId
+}: Pick<Job, "caseName" | "jobDate" | "dueDate" | "client" | "reporterId"> 
+ {
   const jobIndex = await getIndex()
   invariant(jobIndex, "No Job Index Found")
   const newJobIndex = parseInt(jobIndex) + 1

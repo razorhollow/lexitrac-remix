@@ -27,7 +27,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     invariant(caseName, "Case Name is Required" )
     invariant(jobDate, "Job Date is Required")
   
-    await prisma.job.create()
+    await createJob({ caseName, jobDate, dueDate, client, reporterId})
     await advanceIndex()
   
     return redirect('/dashboard');
@@ -65,6 +65,18 @@ export default function CreateJob() {
           />
         </label>
       </div>
+      
+      <div>
+        <label className="flex w-full flex-col gap-1">
+          <span>Due Date: </span>
+          <input
+            name="dueDate"
+            className="w-full flex-1 rounded-md border-2 border-blue-500 px-3 py-2 text-lg leading-6"
+            type="datetime-local"
+            aria-label="due date"
+          />
+        </label>
+      </div>
 
       <div>
         <label className="flex w-full flex-col gap-1">
@@ -81,6 +93,19 @@ export default function CreateJob() {
               </option>
             ))}
           </select>
+        </label>
+      </div>
+      
+      
+      <div>
+        <label className="flex w-full flex-col gap-1">
+          <span>Client: </span>
+          <input
+            name="client"
+            className="w-full flex-1 rounded-md border-2 border-blue-500 px-3 py-2 text-lg leading-6"
+            type="text"
+            aria-label="client"
+          />
         </label>
       </div>
 
