@@ -8,7 +8,17 @@ import { JobFormInput } from "~/types";
 export function getJobListItems() {
     return prisma.job.findMany({
       where: {},
-      select: { jobNumber: true, caseName: true, dueDate: true, reporter: true },
+      select: 
+        { 
+          jobNumber: true, 
+          caseName: true, 
+          dueDate: true, 
+          reporter: {
+            select: {
+              firstName: true,
+            }
+          }
+        },
       orderBy: { dueDate: "desc" },
     });
   }
