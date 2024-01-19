@@ -1,8 +1,5 @@
+import { Job } from "@prisma/client"
 
-export interface JobFormInput {
-  caseName: string,
-  jobDate: string,
-  dueDate: string,
-  client: string,
-  reporterId: string
+export type JobFormInput = Pick<Job, "caseName" | "jobDate" | "dueDate" | "client"> & {
+  reporterId: string | null
 }

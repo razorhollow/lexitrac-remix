@@ -19,16 +19,18 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   
     const formData = await request.formData();
     const caseName = formData.get("caseName") as string;
-    const jobDate = formData.get("jobDate") as string;
-    const dueDate = formData.get("dueDate") as string;
+    const jobDateString = formData.get("jobDate") as string;
+    const jobDate = new Date(jobDateString)
+    const dueDateString = formData.get("dueDate") as string;
+    const dueDate = new Date(dueDateString)
     const client = formData.get("client") as string;
-    const reporter = formData.get("reporter") as string;
+    const reporterId = formData.get("reporter") as string;
   
     invariant(caseName, "Case Name is Required" )
     invariant(jobDate, "Job Date is Required")
 
-
-    await createJob({ caseName, jobDate, dueDate, client, reporter })
+    console.log({ caseName, jobDate, dueDate, client, reporterId })
+    await createJob({ caseName, jobDate, dueDate, client, reporterId })
     await advanceIndex()
   
     return redirect('/dashboard');
@@ -90,7 +92,7 @@ export default function CreateJob() {
             id='reporter'
             className="w-full flex-1 rounded-md border-2 border-blue-500 px-3 py-2"
           >
-            <option value={undefined}>Unassigned</option>
+            <option value="">Unassigned</option>
             {loaderData.reporterList.map((reporter) => (
               <option key={reporter.id} value={reporter.id} className="w-full flex-1 rounded-md border-2 border-blue-500 px-3 py-2 text-lg leading-6">
                 {reporter.firstName} {reporter.lastName?.[0]?.toUpperCase() ?? ""}.

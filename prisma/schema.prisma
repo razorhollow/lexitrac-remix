@@ -52,7 +52,7 @@ model Job {
   updatedAt DateTime @updatedAt
 
   reporter User? @relation(fields: [reporterId], references: [id])
-  reporterId   String?
+  reporterId   String? 
 }
 
 model JobIndex {

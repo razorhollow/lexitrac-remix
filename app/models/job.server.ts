@@ -26,13 +26,11 @@ export async function createJob({
   dueDate, 
   client,
   reporterId,
-}: Pick<Job, "caseName" | "jobDate" | "dueDate" | "client" | "reporterId"> 
+}: JobFormInput 
 ){
   const jobIndex = await getIndex()
-  console.log('here is the job index received: ', jobIndex)
   invariant(jobIndex, "No Job Index Found")
   const newJobIndex = parseInt(jobIndex) + 1
-  console.log('the job index should be:', newJobIndex)
 
   return prisma.job.create({
     data: {
@@ -41,12 +39,12 @@ export async function createJob({
       dueDate: new Date(dueDate),
       client,
       jobNumber: newJobIndex,
-      reporter: reporterId != null ? {
+      reporter: reporterId === "" ? null
+      :{
         connect: {
-          id: reporterId
+          id: reporterId 
         }
-      }
-      : undefined,
+      } 
     }
   })
 }
