@@ -1,9 +1,9 @@
+import { TrashIcon, PaperPlaneIcon, CheckboxIcon } from "@radix-ui/react-icons";
 import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData, Form } from "@remix-run/react";
 import moment from "moment";
 import invariant from "tiny-invariant";
-import { TrashIcon, PaperPlaneIcon, CheckboxIcon } from "@radix-ui/react-icons";
 
 import { Button } from "~/components/ui/Button";
 import { deleteJob, getJob } from "~/models/job.server";
@@ -24,10 +24,20 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     return json(job)
 }
 
-export async function action({ params }: ActionFunctionArgs) {
-  invariant(params.jobNumber, "Job Number not found")
-  await deleteJob({jobNumber: parseInt(params.jobNumber)})
-  return redirect('/dashboard')
+export async function action({ request, params }: ActionFunctionArgs) {
+  const formData = await request.formData()
+  const intent = formData.get('intent')
+  switch (intent) {
+    case 'delete': {
+      const jobNumber = params.jobNumber as string
+      await deleteJob({jobNumber: parseInt(jobNumber)})
+      invariant(params.jobNumber, "Job Number not found")
+      return redirect('/dashboard')
+    }
+    default: {
+      throw new Response(`Invalid intent: ${intent}`)
+    }
+  }
 }
 
 export default function JobDetailsPage() {
