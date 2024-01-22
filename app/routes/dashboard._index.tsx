@@ -1,4 +1,4 @@
-import type { LoaderFunctionArgs } from "@remix-run/node"
+import { User } from "@prisma/client";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import moment from "moment";
@@ -11,7 +11,7 @@ interface JobItem {
   caseName: string;
   dueDate: Date;
   client: string;
-  reporter?: string;
+  reporter?: User;
 }
 
 
@@ -38,7 +38,7 @@ export default function DashboardIndex() {
                   Due Date: {moment(job.dueDate).format('MM/DD/YYYY')}
                 </p>
                 <p className="text-gray-700 text-base">
-                  Reporter: {job.reporter?.firstName || 'unassigned'}
+                  Reporter: {job.reporter ? job.reporter.firstName : 'unassigned'}
                 </p>
               </div>
             </Link>
