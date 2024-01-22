@@ -3,7 +3,9 @@ import { json, redirect } from "@remix-run/node";
 import { useLoaderData, Form } from "@remix-run/react";
 import moment from "moment";
 import invariant from "tiny-invariant";
+import { TrashIcon, PaperPlaneIcon, CheckboxIcon } from "@radix-ui/react-icons";
 
+import { Button } from "~/components/ui/Button";
 import { deleteJob, getJob } from "~/models/job.server";
 
 
@@ -40,7 +42,11 @@ export default function JobDetailsPage() {
         <Form
           method="POST"
           >
-          <button type="submit">DELETE</button>
+            <div className="flex justify-around w-100">
+            <Button name="intent" value="delete" variant="destructive" type="submit"><TrashIcon className="mr-2" /> DELETE</Button>
+            <Button name="intent" value="complete" variant="outline" type="submit"><PaperPlaneIcon className="mr-2" />Submit</Button>
+            <Button name="intent" value="close" variant="secondary" type="submit"><CheckboxIcon className="mr-2" /> Close</Button>
+          </div>
         </Form>
         </main>
     )

@@ -1,10 +1,12 @@
 import { Link, Outlet } from "@remix-run/react";
 
+import { Button } from "~/components/ui/Button";
+
 export default function Dashboard() {
   return (
     <div>
       <h1>This is the Dashboard</h1>
-      <Link to="new"><button className="rounded bg-slate-600 p-3 mb-4 w-24 text-white">Add +</button></Link>
+      <Link to="new"><Button>Add +</Button></Link>
       <Outlet />
     </div>
   );
