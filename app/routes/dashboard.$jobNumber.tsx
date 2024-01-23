@@ -1,4 +1,4 @@
-import { TrashIcon, PaperPlaneIcon, CheckboxIcon } from "@radix-ui/react-icons";
+import { TrashIcon, PaperPlaneIcon, CheckboxIcon, SymbolIcon, DoubleArrowUpIcon } from "@radix-ui/react-icons";
 import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData, Form } from "@remix-run/react";
@@ -66,8 +66,16 @@ export default function JobDetailsPage() {
           >
             <div className="flex justify-around w-100">
             <Button name="intent" value="delete" variant="destructive" type="submit"><TrashIcon className="mr-2" /> DELETE</Button>
-            <Button name="intent" value="submit" variant="outline" type="submit"><PaperPlaneIcon className="mr-2" />Submit</Button>
-            <Button name="intent" value="close" variant="secondary" type="submit"><CheckboxIcon className="mr-2" /> Close</Button>
+            {job.submitted === false ? 
+              <Button name="intent" value="submit" variant="outline" type="submit"><PaperPlaneIcon className="mr-2" />Submit</Button>
+              :
+              <Button name="intent" value="return for changes" variant="outline" type="submit"><SymbolIcon className="mr-2" />Return for Changes</Button>
+            }
+            {job.closed === false ?
+              <Button name="intent" value="close" variant="secondary" type="submit"><CheckboxIcon className="mr-2" /> Close</Button>
+              :
+              <Button name="intent" value="reopen" variant="secondary" type="submit"><DoubleArrowUpIcon className="mr-2" /> Reopen</Button>
+            }
           </div>
         </Form>
         </main>

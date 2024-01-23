@@ -25,7 +25,7 @@ export function getJobListItems() {
 
 export function getJob(jobNumber: number) {
     return prisma.job.findFirst({
-    select: { jobNumber: true, caseName: true, jobDate: true, dueDate: true, client: true, reporter: true } ,
+    select: { jobNumber: true, caseName: true, jobDate: true, dueDate: true, client: true, reporter: true, submitted: true, closed: true } ,
     where: { jobNumber }
     })
 }
