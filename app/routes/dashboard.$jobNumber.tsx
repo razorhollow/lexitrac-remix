@@ -6,7 +6,7 @@ import moment from "moment";
 import invariant from "tiny-invariant";
 
 import { Button } from "~/components/ui/Button";
-import { deleteJob, getJob } from "~/models/job.server";
+import { deleteJob, getJob, submitJob, closeJob } from "~/models/job.server";
 
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
@@ -34,6 +34,18 @@ export async function action({ request, params }: ActionFunctionArgs) {
       invariant(params.jobNumber, "Job Number not found")
       return redirect('/dashboard')
     }
+    case 'submit': {
+      const jobNumber = params.jobNumber as string
+      await submitJob({jobNumber: parseInt(jobNumber)})
+      invariant(params.jobNumber, "Job Number not found")
+      return redirect('/dashboard')
+    }
+    case 'close': {
+      const jobNumber = params.jobNumber as string
+      await closeJob({jobNumber: parseInt(jobNumber)})
+      invariant(params.jobNumber, "Job Number not found")
+      return redirect('/dashboard')
+    }
     default: {
       throw new Response(`Invalid intent: ${intent}`)
     }
@@ -54,7 +66,7 @@ export default function JobDetailsPage() {
           >
             <div className="flex justify-around w-100">
             <Button name="intent" value="delete" variant="destructive" type="submit"><TrashIcon className="mr-2" /> DELETE</Button>
-            <Button name="intent" value="complete" variant="outline" type="submit"><PaperPlaneIcon className="mr-2" />Submit</Button>
+            <Button name="intent" value="submit" variant="outline" type="submit"><PaperPlaneIcon className="mr-2" />Submit</Button>
             <Button name="intent" value="close" variant="secondary" type="submit"><CheckboxIcon className="mr-2" /> Close</Button>
           </div>
         </Form>
