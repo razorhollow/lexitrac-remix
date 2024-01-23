@@ -47,6 +47,8 @@ model Job {
   jobDate  DateTime
   dueDate  DateTime
   client   String
+  submitted Boolean @default(false)
+  closed Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
