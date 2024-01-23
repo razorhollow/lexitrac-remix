@@ -1,7 +1,7 @@
 import { json, redirect, type ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
-import invariant from "tiny-invariant";
 import {DateTime} from 'luxon'
+import invariant from "tiny-invariant";
 
 import { updateJob, getJob } from "~/models/job.server";
 import { getUserList } from "~/models/user.server";
@@ -26,9 +26,9 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 }
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
-  
     const formData = await request.formData();
-    const jobNumber = parseInt(params.jobNumber)
+    invariant(params.jobNumber, "Missing param")
+    const jobNumber = +params.jobNumber
     const caseName = formData.get("caseName") as string;
     const jobDateString = formData.get("jobDate") as string;
     const jobDate = new Date(jobDateString)
@@ -40,7 +40,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     invariant(caseName, "Case Name is Required" )
     invariant(jobDate, "Job Date is Required")
 
-    console.log({ caseName, jobDate, dueDate, client, reporterId })
     await updateJob({ jobNumber, caseName, jobDate, dueDate, client, reporterId })
     await advanceIndex()
   
