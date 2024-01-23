@@ -109,3 +109,25 @@ export async function closeJob({jobNumber}: Pick<Job, "jobNumber">) {
     throw error;
   }
 }
+
+export async function updateJob({
+  jobNumber,
+  caseName, 
+  jobDate, 
+  dueDate, 
+  client,
+  reporterId,
+}: Pick<Job, "jobNumber" | "caseName" | "jobDate" | "dueDate" | "client" | "reporterId">) {
+  await prisma.job.update({
+    where: { 
+      jobNumber 
+    },
+    data: {
+      caseName,
+      jobDate: new Date(jobDate),
+      dueDate: new Date(dueDate),
+      client,
+      reporterId: reporterId && reporterId !== "" ? reporterId : null,
+    },
+})
+}

@@ -1,7 +1,7 @@
 import { TrashIcon, PaperPlaneIcon, CheckboxIcon, SymbolIcon, DoubleArrowUpIcon } from "@radix-ui/react-icons";
 import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { useLoaderData, Form } from "@remix-run/react";
+import { useLoaderData, Form, Link } from "@remix-run/react";
 import moment from "moment";
 import invariant from "tiny-invariant";
 
@@ -78,6 +78,7 @@ export default function JobDetailsPage() {
             }
           </div>
         </Form>
+        <Link to='edit'><Button>Edit</Button></Link>
         </main>
     )
 }
