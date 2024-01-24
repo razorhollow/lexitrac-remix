@@ -1,14 +1,28 @@
 import type { MetaFunction } from "@remix-run/node";
-import { Link } from "@remix-run/react";
+import { ActionFunctionArgs } from "@remix-run/node";
+import { Link, redirect, Form } from "@remix-run/react";
 
+import { seed } from "prisma/seed";
+import { Button } from "~/components/ui/Button";
+import { requireUser } from "~/session.server";
 import { useOptionalUser } from "~/utils";
 
 export const meta: MetaFunction = () => [{ title: "LexiTrac" }];
+
+export const action = async ({request}: ActionFunctionArgs) => {
+  // requireUser(request)
+  await seed()
+  // Process formData here
+  // const result = await someDatabaseFunction(formData.get('field'));
+
+  return redirect('dashboard')
+};
 
 export default function Index() {
   const user = useOptionalUser();
   return (
     <main className="relative min-h-screen bg-white sm:flex sm:items-center sm:justify-center">
+      <Form method='POST'><Button type='submit'>Initialize Database</Button></Form>
       <div className="relative sm:pb-16 sm:pt-8">
         <Link to="dashboard">Dashboard</Link>
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">

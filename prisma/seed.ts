@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 
 
 
-async function seed() {
+export async function seed() {
   const email = "rachel@remix.run";
 
   // cleanup the existing database
