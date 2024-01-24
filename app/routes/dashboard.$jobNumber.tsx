@@ -1,4 +1,4 @@
-import { TrashIcon, PaperPlaneIcon, CheckboxIcon, SymbolIcon, DoubleArrowUpIcon } from "@radix-ui/react-icons";
+import { TrashIcon, DownloadIcon, CheckboxIcon, SymbolIcon, DoubleArrowUpIcon, Pencil2Icon, PaperPlaneIcon } from "@radix-ui/react-icons";
 import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData, Form, Link } from "@remix-run/react";
@@ -68,30 +68,95 @@ export default function JobDetailsPage() {
     const job = useLoaderData<typeof loader>()
     console.log(job)
     return (
-        <main>
-          <h1>Job Number {job.jobNumber}</h1>  
-          <h2>{job.caseName}</h2>
-          <h3>{job.client}</h3>
-          <p>Due: {moment(job.dueDate).format('MM/DD/YYYY')}</p>
-          <p>{job.reporter?.firstName} {job.reporter?.lastName}</p>
-        <Form
-          method="POST"
-          >
-            <div className="flex justify-around w-100">
-            <Button name="intent" value="delete" variant="destructive" type="submit"><TrashIcon className="mr-2" /> DELETE</Button>
-            {job.submitted === false ? 
-              <Button name="intent" value="submit" variant="outline" type="submit"><PaperPlaneIcon className="mr-2" />Submit</Button>
-              :
-              <Button name="intent" value="return" variant="outline" type="submit"><SymbolIcon className="mr-2" />Return for Changes</Button>
-            }
-            {job.closed === false ?
-              <Button name="intent" value="close" variant="secondary" type="submit"><CheckboxIcon className="mr-2" /> Close</Button>
-              :
-              <Button name="intent" value="reopen" variant="secondary" type="submit"><DoubleArrowUpIcon className="mr-2" /> Reopen</Button>
-            }
+      <div className="w-4/5 mx-auto">
+      <div className="px-4 sm:px-0 flex justify-between align-baseline">
+        <div>
+          <h3 className="text-base font-semibold leading-7 text-gray-900">Job Information</h3>
+          <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-500">Details and files</p>
+        </div>
+        <Link to='edit'><Button><Pencil2Icon className="me-2"/>Edit</Button></Link>
+      </div>
+      <div className="mt-6 border-t border-gray-100">
+        <dl className="divide-y divide-gray-100">
+          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt className="text-sm font-medium leading-6 text-gray-900">Case Name</dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{job.caseName}</dd>
           </div>
-        </Form>
-        <Link to='edit'><Button>Edit</Button></Link>
-        </main>
-    )
-}
+          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt className="text-sm font-medium leading-6 text-gray-900">Job Number</dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{job.jobNumber}</dd>
+          </div>
+          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt className="text-sm font-medium leading-6 text-gray-900">Client</dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{job.client}</dd>
+          </div>
+          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt className="text-sm font-medium leading-6 text-gray-900">Job Date</dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{moment(job.jobDate).format('MM/DD/YYYY')}</dd>
+          </div>
+          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt className="text-sm font-medium leading-6 text-gray-900">Job Time</dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{moment(job.jobDate).format('LT')}</dd>
+          </div>
+          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt className="text-sm font-medium leading-6 text-gray-900">Due Date</dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{moment(job.dueDate).format('MM/DD/YYYY')}</dd>
+          </div>
+          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt className="text-sm font-medium leading-6 text-gray-900">Reporter Assigned</dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{job.reporter?.firstName} {job.reporter?.lastName}</dd>
+          </div>
+          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt className="text-sm font-medium leading-6 text-gray-900">Location</dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+              CSR Court Reporting <br/>214 Reasor Hollow Rd <br/>Big Flats, NY 14814
+            </dd>
+          </div>
+          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt className="text-sm font-medium leading-6 text-gray-900">Attachments</dt>
+            <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+              <ul className="divide-y divide-gray-100 rounded-md border border-gray-200">
+                <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
+                  <div className="flex w-0 flex-1 items-center">
+                    <DownloadIcon className="h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
+                    <div className="ml-4 flex min-w-0 flex-1 gap-2">
+                      <span className="truncate font-medium">transcript_original.pdf</span>
+                      <span className="flex-shrink-0 text-gray-400">2.4mb</span>
+                    </div>
+                  </div>
+                </li>
+                <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
+                  <div className="flex w-0 flex-1 items-center">
+                    <DownloadIcon className="h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
+                    <div className="ml-4 flex min-w-0 flex-1 gap-2">
+                      <span className="truncate font-medium">transcript_approved.pdf</span>
+                      <span className="flex-shrink-0 text-gray-400">4.5mb</span>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </dd>
+          </div>
+        </dl>
+      </div>
+    <Form
+      method="POST"
+      className="pb-3"
+      >
+        <div className="flex justify-around w-100">
+        <Button name="intent" value="delete" variant="destructive" type="submit"><TrashIcon className="mr-2" /> DELETE</Button>
+        {job.submitted === false ? 
+          <Button name="intent" value="submit" variant="outline" type="submit"><PaperPlaneIcon className="mr-2" />Submit</Button>
+          :
+          <Button name="intent" value="return" variant="outline" type="submit"><SymbolIcon className="mr-2" />Return for Changes</Button>
+        }
+        {job.closed === false ?
+          <Button name="intent" value="close" variant="secondary" type="submit"><CheckboxIcon className="mr-2" /> Close</Button>
+          :
+          <Button name="intent" value="reopen" variant="secondary" type="submit"><DoubleArrowUpIcon className="mr-2" /> Reopen</Button>
+        }
+      </div>
+    </Form>
+    </div>
+      )
+    }
