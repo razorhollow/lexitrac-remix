@@ -1,15 +1,15 @@
 import type { MetaFunction } from "@remix-run/node";
-import { ActionFunctionArgs } from "@remix-run/node";
+// import { ActionFunctionArgs } from "@remix-run/node";
 import { Link, redirect, Form } from "@remix-run/react";
 
 import { seed } from "prisma/seed";
 import { Button } from "~/components/ui/Button";
-import { requireUser } from "~/session.server";
+// import { requireUser } from "~/session.server";
 import { useOptionalUser } from "~/utils";
 
 export const meta: MetaFunction = () => [{ title: "LexiTrac" }];
 
-export const action = async ({request}: ActionFunctionArgs) => {
+export const action = async () => {
   // requireUser(request)
   await seed()
   // Process formData here
