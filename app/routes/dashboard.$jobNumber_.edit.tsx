@@ -3,7 +3,7 @@ import { Form, useLoaderData } from "@remix-run/react";
 import {DateTime} from 'luxon'
 import invariant from "tiny-invariant";
 
-import { updateJob, getJob } from "~/models/job.server";
+import { updateJob, getJob, } from "~/models/job.server";
 import { getUserList } from "~/models/user.server";
 import { advanceIndex } from "~/utils";
 

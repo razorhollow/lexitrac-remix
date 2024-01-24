@@ -6,7 +6,7 @@ import moment from "moment";
 import invariant from "tiny-invariant";
 
 import { Button } from "~/components/ui/Button";
-import { deleteJob, getJob, submitJob, closeJob } from "~/models/job.server";
+import { deleteJob, getJob, submitJob, closeJob, returnJob, reopenJob } from "~/models/job.server";
 
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
@@ -46,6 +46,18 @@ export async function action({ request, params }: ActionFunctionArgs) {
       invariant(params.jobNumber, "Job Number not found")
       return redirect('/dashboard')
     }
+    case 'reopen': {
+      const jobNumber = params.jobNumber as string
+      await reopenJob({jobNumber: parseInt(jobNumber)})
+      invariant(params.jobNumber, "Job Number not found")
+      return redirect('/dashboard')
+    }
+    case 'return': {
+      const jobNumber = params.jobNumber as string
+      await returnJob({jobNumber: parseInt(jobNumber)})
+      invariant(params.jobNumber, "Job Number not found")
+      return redirect('/dashboard')
+    }
     default: {
       throw new Response(`Invalid intent: ${intent}`)
     }
@@ -54,6 +66,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function JobDetailsPage() {
     const job = useLoaderData<typeof loader>()
+    console.log(job)
     return (
         <main>
           <h1>Job Number {job.jobNumber}</h1>  
@@ -69,7 +82,7 @@ export default function JobDetailsPage() {
             {job.submitted === false ? 
               <Button name="intent" value="submit" variant="outline" type="submit"><PaperPlaneIcon className="mr-2" />Submit</Button>
               :
-              <Button name="intent" value="return for changes" variant="outline" type="submit"><SymbolIcon className="mr-2" />Return for Changes</Button>
+              <Button name="intent" value="return" variant="outline" type="submit"><SymbolIcon className="mr-2" />Return for Changes</Button>
             }
             {job.closed === false ?
               <Button name="intent" value="close" variant="secondary" type="submit"><CheckboxIcon className="mr-2" /> Close</Button>

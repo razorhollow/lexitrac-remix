@@ -109,6 +109,54 @@ export async function closeJob({jobNumber}: Pick<Job, "jobNumber">) {
     throw error;
   }
 }
+export async function reopenJob({jobNumber}: Pick<Job, "jobNumber">) {
+  try {
+    // Find the job by jobNumber
+    const job = await prisma.job.findUnique({
+      where: { jobNumber },
+    });
+
+    if (!job) {
+      throw new Error(`Job with jobNumber ${jobNumber} not found`);
+    }
+
+    // Update the 'close' field to false
+    await prisma.job.update({
+      where: { jobNumber },
+      data: { closed: false },
+    });
+
+    console.log(`Job with jobNumber ${jobNumber} closed successfully.`);
+  } catch (error) {
+    // Handle the error as needed, e.g., log or throw
+    console.error('Error closing job:', error);
+    throw error;
+  }
+}
+export async function returnJob({jobNumber}: Pick<Job, "jobNumber">) {
+  try {
+    // Find the job by jobNumber
+    const job = await prisma.job.findUnique({
+      where: { jobNumber },
+    });
+
+    if (!job) {
+      throw new Error(`Job with jobNumber ${jobNumber} not found`);
+    }
+
+    // Update the 'submitted' field to false
+    await prisma.job.update({
+      where: { jobNumber },
+      data: { submitted: false },
+    });
+
+    console.log(`Job with jobNumber ${jobNumber} returned successfully.`);
+  } catch (error) {
+    // Handle the error as needed, e.g., log or throw
+    console.error('Error returning job:', error);
+    throw error;
+  }
+}
 
 export async function updateJob({
   jobNumber,
