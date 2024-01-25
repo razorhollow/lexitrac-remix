@@ -1,5 +1,4 @@
 import type { Job } from "@prisma/client";
-import { DateTime } from "luxon";
 import invariant from "tiny-invariant";
 
 import { getIndex } from "app/utils";
