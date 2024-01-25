@@ -9,20 +9,20 @@ import { useOptionalUser } from "~/utils";
 
 export const meta: MetaFunction = () => [{ title: "LexiTrac" }];
 
-export const action = async () => {
+// export const action = async () => {
   // requireUser(request)
-  await seed()
+  // await seed()
   // Process formData here
   // const result = await someDatabaseFunction(formData.get('field'));
 
-  return redirect('dashboard')
-};
+  // return redirect('dashboard')
+// };
 
 export default function Index() {
   const user = useOptionalUser();
   return (
     <main className="relative min-h-screen bg-white sm:flex sm:items-center sm:justify-center">
-      <Form method='POST'><Button type='submit'>Initialize Database</Button></Form>
+      {/* <Form method='POST'><Button type='submit'>Initialize Database</Button></Form> */}
       <div className="relative sm:pb-16 sm:pt-8">
         <Link to="dashboard">Dashboard</Link>
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">

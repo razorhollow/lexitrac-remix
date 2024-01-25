@@ -67,9 +67,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export default function JobDetailsPage() {
     const job = useLoaderData<typeof loader>()
     const dueDate = DateTime.fromISO(job.dueDate)
-    console.log('------------------client logs-------------')
-    console.log('this is the jobDate that is being returned with the loader: ', job.jobDate)
-    console.log('this is the formatted jobDate time being displayed: ', DateTime.fromISO(job.jobDate, { zone: 'utc' }).toFormat('h:mm a'))
     return (
       <div className="w-4/5 mx-auto">
       <div className="px-4 sm:px-0 flex justify-between align-baseline">
@@ -99,7 +96,7 @@ export default function JobDetailsPage() {
           </div>
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
             <dt className="text-sm font-medium leading-6 text-gray-900">Job Time</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{DateTime.fromISO(job.jobDate).toFormat('h:mm a')}</dd>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{DateTime.fromISO(job.jobDate, { zone: 'utc' }).toFormat('h:mm a')}</dd>
           </div>
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
             <dt className="text-sm font-medium leading-6 text-gray-900">Due Date</dt>

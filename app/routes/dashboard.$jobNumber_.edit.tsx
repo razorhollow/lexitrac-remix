@@ -47,10 +47,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   };
 
 export default function EditJob() {
-    // handle time zone issue similar to NewJob
     const data = useLoaderData<typeof loader>()
-    const utcDate = data.job.jobDate
-    const localDate = DateTime.fromISO(utcDate).toFormat("yyyy-MM-dd'T'HH:mm")
   return (
     <div className="w-4/5 flex flex-col justify-center items-center">
       <Form
@@ -79,7 +76,7 @@ export default function EditJob() {
             className="w-full flex-1 rounded-md border-2 border-blue-500 px-3 py-2 text-lg leading-6"
             type="datetime-local"
             aria-label="date and time"
-            defaultValue={localDate.toString()}
+            defaultValue={DateTime.fromISO(data.job.jobDate, { zone: 'utc' }).toFormat('h:mm a')}
           />
         </label>
       </div>
