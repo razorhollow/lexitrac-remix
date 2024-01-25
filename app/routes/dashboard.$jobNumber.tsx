@@ -66,7 +66,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function JobDetailsPage() {
     const job = useLoaderData<typeof loader>()
-    console.log(job)
+    const jobDate = new Date(job.jobDate)
+    console.log(jobDate.toLocaleString())
     return (
       <div className="w-4/5 mx-auto">
       <div className="px-4 sm:px-0 flex justify-between align-baseline">
@@ -92,11 +93,11 @@ export default function JobDetailsPage() {
           </div>
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
             <dt className="text-sm font-medium leading-6 text-gray-900">Job Date</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{moment(job.jobDate).format('MM/DD/YYYY')}</dd>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{moment(jobDate).format('MM/DD/YYYY')}</dd>
           </div>
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
             <dt className="text-sm font-medium leading-6 text-gray-900">Job Time</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{moment(job.jobDate).format('LT')}</dd>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{moment(jobDate).format('LT')}</dd>
           </div>
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
             <dt className="text-sm font-medium leading-6 text-gray-900">Due Date</dt>
