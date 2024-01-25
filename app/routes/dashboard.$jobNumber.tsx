@@ -69,7 +69,7 @@ export default function JobDetailsPage() {
     const dueDate = DateTime.fromISO(job.dueDate)
     console.log('------------------client logs-------------')
     console.log('this is the jobDate that is being returned with the loader: ', job.jobDate)
-    console.log('this is the formatted jobDate time being displayed: ', DateTime.fromISO(job.jobDate).toFormat('h:mm a'))
+    console.log('this is the formatted jobDate time being displayed: ', DateTime.fromISO(job.jobDate, { zone: 'utc' }).toFormat('h:mm a'))
     return (
       <div className="w-4/5 mx-auto">
       <div className="px-4 sm:px-0 flex justify-between align-baseline">
