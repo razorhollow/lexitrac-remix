@@ -30,6 +30,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     invariant(caseName, "Case Name is Required" )
     invariant(jobDate, "Job Date is Required")
 
+    console.log("-------------------- New Action Logs ----------------")
+    console.log('this is the jobDateString being passed from form: ',jobDateString)
+    console.log('this is the jobDate hitting the db: ', jobDate)
+
     await createJob({ caseName, jobDate, dueDate, client, reporterId })
     await advanceIndex()
   
