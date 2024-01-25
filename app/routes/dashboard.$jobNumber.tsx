@@ -2,7 +2,7 @@ import { TrashIcon, DownloadIcon, CheckboxIcon, SymbolIcon, DoubleArrowUpIcon, P
 import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData, Form, Link } from "@remix-run/react";
-import moment from "moment";
+import { DateTime } from "luxon";
 import invariant from "tiny-invariant";
 
 import { Button } from "~/components/ui/Button";
@@ -66,7 +66,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function JobDetailsPage() {
     const job = useLoaderData<typeof loader>()
-    const jobDate = new Date(job.jobDate)
+    const jobDate = DateTime.fromISO(job.jobDate).setZone('America/New_York')
+    const dueDate = DateTime.fromISO(job.dueDate).setZone('America/New_York')
     console.log(jobDate.toLocaleString())
     return (
       <div className="w-4/5 mx-auto">
@@ -93,15 +94,15 @@ export default function JobDetailsPage() {
           </div>
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
             <dt className="text-sm font-medium leading-6 text-gray-900">Job Date</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{moment(jobDate).format('MM/DD/YYYY')}</dd>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{jobDate.toFormat('DD')}</dd>
           </div>
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
             <dt className="text-sm font-medium leading-6 text-gray-900">Job Time</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{moment(jobDate).format('LT')}</dd>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{jobDate.toFormat('h:mm:a')}</dd>
           </div>
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
             <dt className="text-sm font-medium leading-6 text-gray-900">Due Date</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{moment(job.dueDate).format('MM/DD/YYYY')}</dd>
+            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{dueDate.toFormat('DD')}</dd>
           </div>
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
             <dt className="text-sm font-medium leading-6 text-gray-900">Reporter Assigned</dt>
