@@ -32,6 +32,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     console.log('-------------Action Console Start -------------')
     console.log('the date object is: ',jobDate)
     console.log('the raw html input is: ', jobDateString)
+    console.log('The actual jobDate thing hitting the database is: ', DateTime.fromJSDate(jobDate).toUTC().toJSDate())
     console.log('------------- End of Log ------------------')
 
     await createJob({ caseName, jobDate, dueDate, client, reporterId })

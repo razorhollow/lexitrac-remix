@@ -47,13 +47,16 @@ export async function createJob({
   return prisma.job.create({
     data: {
       caseName,
-      jobDate: DateTime.fromJSDate(jobDate).toUTC().toJSDate(), // Convert to UTC and format as ISO string
-      dueDate: DateTime.fromJSDate(dueDate).toUTC().toJSDate(), // Convert to UTC and format as ISO string
+      jobDate,
+      dueDate,
       client,
       jobNumber: newJobIndex,
       reporterId: reporterId && reporterId !== "" ? reporterId : null,
     }
   })
+
+  console.log('---------------- LOOKY ME -----------------')
+  
 }
 
 export function deleteJob({jobNumber}: Pick<Job, "jobNumber">) {
