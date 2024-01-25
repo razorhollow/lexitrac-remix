@@ -29,7 +29,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   
     invariant(caseName, "Case Name is Required" )
     invariant(jobDate, "Job Date is Required")
+    console.log('-------------Action Console Start -------------')
     console.log('the date object is: ',jobDate)
+    console.log('the raw html input is: ', jobDateString)
+    console.log('------------- End of Log ------------------')
 
     await createJob({ caseName, jobDate, dueDate, client, reporterId })
     await advanceIndex()

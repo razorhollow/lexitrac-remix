@@ -1,4 +1,5 @@
 import type { Job } from "@prisma/client";
+import { DateTime } from "luxon";
 import invariant from "tiny-invariant";
 
 import { getIndex } from "app/utils";
@@ -41,12 +42,13 @@ export async function createJob({
   const jobIndex = await getIndex()
   invariant(jobIndex, "No Job Index Found")
   const newJobIndex = parseInt(jobIndex) + 1
+  invariant(jobDate, "Job Date is required")
 
   return prisma.job.create({
     data: {
       caseName,
-      jobDate: new Date(jobDate),
-      dueDate: new Date(dueDate),
+      jobDate: DateTime.fromJSDate(jobDate).toUTC().toJSDate(), // Convert to UTC and format as ISO string
+      dueDate: DateTime.fromJSDate(dueDate).toUTC().toJSDate(), // Convert to UTC and format as ISO string
       client,
       jobNumber: newJobIndex,
       reporterId: reporterId && reporterId !== "" ? reporterId : null,
