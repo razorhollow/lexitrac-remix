@@ -1,10 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
-// import { ActionFunctionArgs } from "@remix-run/node";
-import { Link, redirect, Form } from "@remix-run/react";
+import { Link } from "@remix-run/react";
 
-import { seed } from "prisma/seed";
-import { Button } from "~/components/ui/Button";
-// import { requireUser } from "~/session.server";
 import { useOptionalUser } from "~/utils";
 
 export const meta: MetaFunction = () => [{ title: "LexiTrac" }];
