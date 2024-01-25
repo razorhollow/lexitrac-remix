@@ -31,7 +31,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const jobNumber = +params.jobNumber
     const caseName = formData.get("caseName") as string;
     const jobDateString = formData.get("jobDate") as string;
-    const jobDate = new Date(jobDateString)
+    const jobDate = DateTime.fromISO(jobDateString).toUTC().toJSDate()
     const dueDateString = formData.get("dueDate") as string;
     const dueDate = new Date(dueDateString)
     const client = formData.get("client") as string;

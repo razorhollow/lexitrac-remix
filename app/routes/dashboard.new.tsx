@@ -1,5 +1,6 @@
 import { json, redirect, type ActionFunctionArgs } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
+import { DateTime } from "luxon";
 import invariant from "tiny-invariant";
 
 import { prisma } from "~/db.server";
@@ -20,7 +21,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const formData = await request.formData();
     const caseName = formData.get("caseName") as string;
     const jobDateString = formData.get("jobDate") as string;
-    const jobDate = new Date(jobDateString)
+    const jobDate = DateTime.fromISO(jobDateString).toUTC().toJSDate()
     const dueDateString = formData.get("dueDate") as string;
     const dueDate = new Date(dueDateString)
     const client = formData.get("client") as string;
