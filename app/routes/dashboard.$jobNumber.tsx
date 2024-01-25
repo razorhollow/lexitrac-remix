@@ -66,8 +66,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function JobDetailsPage() {
     const job = useLoaderData<typeof loader>()
-    const jobDate = DateTime.fromISO(job.jobDate).setZone('America/New_York')
-    const dueDate = DateTime.fromISO(job.dueDate).setZone('America/New_York')
+    const jobDate = DateTime.fromISO(job.jobDate)
+    const dueDate = DateTime.fromISO(job.dueDate)
     console.log(jobDate.toLocaleString())
     return (
       <div className="w-4/5 mx-auto">
