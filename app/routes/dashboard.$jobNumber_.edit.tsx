@@ -47,10 +47,10 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   };
 
 export default function EditJob() {
+    // handle time zone issue similar to NewJob
     const data = useLoaderData<typeof loader>()
     const utcDate = data.job.jobDate
     const localDate = DateTime.fromISO(utcDate).toFormat("yyyy-MM-dd'T'HH:mm")
-    console.log('THIS IS THE FORMAt: ', localDate)
   return (
     <div className="w-4/5 flex flex-col justify-center items-center">
       <Form

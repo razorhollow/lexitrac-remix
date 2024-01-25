@@ -53,9 +53,6 @@ export async function createJob({
       reporterId: reporterId && reporterId !== "" ? reporterId : null,
     }
   })
-
-  console.log('---------------- LOOKY ME -----------------')
-  
 }
 
 export function deleteJob({jobNumber}: Pick<Job, "jobNumber">) {

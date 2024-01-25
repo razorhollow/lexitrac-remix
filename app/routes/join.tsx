@@ -13,7 +13,7 @@ import { safeRedirect, validateEmail } from "~/utils";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await getUserId(request);
-  if (userId) return redirect("/");
+  if (userId) return redirect("/dashboard");
   return json({});
 };
 
@@ -21,25 +21,41 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const email = formData.get("email");
   const password = formData.get("password");
+  const firstName = formData.get("first")
+  const lastName = formData.get("last")
   const redirectTo = safeRedirect(formData.get("redirectTo"), "/");
 
   if (!validateEmail(email)) {
     return json(
-      { errors: { email: "Email is invalid", password: null } },
+      { errors: { email: "Email is invalid", firstName: null, lastName: null, password: null } },
+      { status: 400 },
+    );
+  }
+
+  if (typeof firstName != 'string' || firstName.length === 0) {
+    return json(
+      { errors: { email: null, firstName: "first name is invalid", lastName: null, password: null } },
+      { status: 400 },
+    );
+  }
+
+  if (typeof lastName != 'string' || lastName.length === 0) {
+    return json(
+      { errors: { email: null, lastName: "last name is invalid", firstName: null, password: null } },
       { status: 400 },
     );
   }
 
   if (typeof password !== "string" || password.length === 0) {
     return json(
-      { errors: { email: null, password: "Password is required" } },
+      { errors: { email: null, firstName: null, lastName: "last name is invalid", password: null } },
       { status: 400 },
     );
   }
 
   if (password.length < 8) {
     return json(
-      { errors: { email: null, password: "Password is too short" } },
+      { errors: { email: null, firstName: null, lastName:null, password: "Password is too short" } },
       { status: 400 },
     );
   }
@@ -57,7 +73,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     );
   }
 
-  const user = await createUser(email, password);
+  const user = await createUser(email, firstName, lastName, password, );
 
   return createUserSession({
     redirectTo,
@@ -114,6 +130,42 @@ export default function Join() {
                   {actionData.errors.email}
                 </div>
               ) : null}
+            </div>
+          </div>
+
+          <div>
+            <label 
+              htmlFor="first-name"
+              className="block text-sm font-medium text-gray-700"
+            >
+              First Name
+            </label>
+            <div className="mt-1">
+              <input 
+                type="text" 
+                name="first" 
+                id="first-name"
+                autoComplete="given-name"
+                className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label 
+              htmlFor="last-name"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Last Name
+            </label>
+            <div className="mt-1">
+              <input 
+                type="text" 
+                name="last" 
+                id="last-name"
+                autoComplete="family-name"
+                className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
+              />
             </div>
           </div>
 
