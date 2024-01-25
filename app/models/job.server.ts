@@ -173,8 +173,8 @@ export async function updateJob({
     },
     data: {
       caseName,
-      jobDate: new Date(jobDate),
-      dueDate: new Date(dueDate),
+      jobDate,
+      dueDate,
       client,
       reporterId: reporterId && reporterId !== "" ? reporterId : null,
     },
