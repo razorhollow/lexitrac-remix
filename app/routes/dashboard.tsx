@@ -3,7 +3,6 @@ import { Dialog, Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import {
   Bars3Icon,
-  BellIcon,
   CalendarIcon,
   ChartPieIcon,
   Cog6ToothIcon,
@@ -14,8 +13,16 @@ import {
   XMarkIcon,
   PlusIcon,
 } from '@heroicons/react/24/outline'
+import { LoaderFunctionArgs, json } from '@remix-run/node'
 import { Link, Outlet } from '@remix-run/react'
 import { Fragment, useState } from 'react'
+import invariant from 'tiny-invariant'
+
+import { prisma } from '~/db.server'
+import { requireUserId } from '~/session.server'
+import { useUser } from '~/utils'
+
+
 
 const navigation = [
   { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
@@ -27,15 +34,26 @@ const navigation = [
 ]
 const userNavigation = [
   { name: 'Your profile', href: '#' },
-  { name: 'Sign out', href: '#' },
+  { name: 'Sign out', href: '/logout' },
 ]
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
+export async function loader({ request }: LoaderFunctionArgs) {
+	const userId = await requireUserId(request)
+	const user = await prisma.user.findUnique({
+		where: { id: userId },
+		select: { firstName: true },
+	})
+	invariant(user, 'User not found')
+	return json({})
+}
+
 export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const user = useUser()
 
   return (
     <>
@@ -235,7 +253,7 @@ export default function Dashboard() {
                     />
                     <span className="hidden lg:flex lg:items-center">
                       <span className="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">
-                        Christine Reynolds
+                        {user.firstName}
                       </span>
                       <ChevronDownIcon className="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
                     </span>
@@ -253,15 +271,15 @@ export default function Dashboard() {
                       {userNavigation.map((item) => (
                         <Menu.Item key={item.name}>
                           {({ active }) => (
-                            <a
-                              href={item.href}
+                            <Link
+                              to={item.href}
                               className={classNames(
                                 active ? 'bg-gray-50' : '',
                                 'block px-3 py-1 text-sm leading-6 text-gray-900'
                               )}
                             >
                               {item.name}
-                            </a>
+                            </Link>
                           )}
                         </Menu.Item>
                       ))}
