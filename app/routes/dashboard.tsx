@@ -26,7 +26,7 @@ import { useUser } from '~/utils'
 
 const navigation = [
   { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
-  { name: 'Add New Job', href: 'dashboard/new', icon: PlusIcon, current: false },
+  { name: 'Add New Job', href: '/dashboard/new', icon: PlusIcon, current: false },
   { name: 'Projects', href: '#', icon: FolderIcon, current: false },
   { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
   { name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false },
