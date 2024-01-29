@@ -16,9 +16,11 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  password Password?
-  notes    Note[]
-  jobs     Job[]
+  image     UserImage?
+  roles     Role[]
+  password  Password?
+  notes     Note[]
+  jobs      Job[]
 }
 
 model Password {
@@ -55,6 +57,12 @@ model Job {
 
   reporter User? @relation(fields: [reporterId], references: [id])
   reporterId   String? 
+  files JobFile[]
+
+  //non-unique foreign key
+  @@index([reporterId])
+  //search helper
+  @@index([reporterId, updatedAt, createdAt])
 }
 
 model JobIndex {
@@ -63,4 +71,60 @@ model JobIndex {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model JobFile {
+  id          String  @id @default(cuid())
+  altText     String?
+  contentType String
+  blob        Bytes
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  job   Job   @relation(fields: [jobId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  jobId String
+
+  // non-unique foreign key
+  @@index([jobId])
+}
+
+model UserImage {
+  id          String  @id @default(cuid())
+  altText     String?
+  contentType String
+  blob        Bytes
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String @unique
+}
+
+model Role {
+  id          String @id @default(cuid())
+  name        String @unique
+  description String @default("")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users       User[]
+  permissions Permission[]
+}
+
+model Permission {
+  id          String @id @default(cuid())
+  action      String // e.g. create, read, update, delete
+  entity      String // e.g. note, user, etc.
+  access      String // e.g. own or any
+  description String @default("")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  roles Role[]
+
+  @@unique([action, entity, access])
 }
