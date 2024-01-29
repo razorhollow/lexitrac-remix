@@ -14,7 +14,7 @@ import {
   PlusIcon,
 } from '@heroicons/react/24/outline'
 import { LoaderFunctionArgs, json } from '@remix-run/node'
-import { Link, Outlet } from '@remix-run/react'
+import { Link, Outlet, Form } from '@remix-run/react'
 import { Fragment, useState } from 'react'
 import invariant from 'tiny-invariant'
 
@@ -271,15 +271,17 @@ export default function Dashboard() {
                       {userNavigation.map((item) => (
                         <Menu.Item key={item.name}>
                           {({ active }) => (
-                            <Link
-                              to={item.href}
+                            <Form
+                              action={item.href}
+                              method="POST"
                               className={classNames(
                                 active ? 'bg-gray-50' : '',
                                 'block px-3 py-1 text-sm leading-6 text-gray-900'
                               )}
                             >
-                              {item.name}
-                            </Link>
+                              <button type='submit'>
+                              {item.name}</button>
+                            </Form>
                           )}
                         </Menu.Item>
                       ))}
