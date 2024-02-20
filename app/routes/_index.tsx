@@ -1,6 +1,7 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 
+import HeroSection from "~/components/HeroSection";
 import { useOptionalUser } from "~/utils";
 
 export const meta: MetaFunction = () => [{ title: "LexiTrac" }];
@@ -8,7 +9,8 @@ export const meta: MetaFunction = () => [{ title: "LexiTrac" }];
 export default function Index() {
   const user = useOptionalUser();
   return (
-    <main className="relative min-h-screen bg-white sm:flex sm:items-center sm:justify-center">
+    <main>
+      <HeroSection user={user}/>
       <div className="relative sm:pb-16 sm:pt-8">
         <Link to="dashboard">Dashboard</Link>
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
